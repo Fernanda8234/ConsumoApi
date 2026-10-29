@@ -44,6 +44,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+// option + command + l -> indentação
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +77,8 @@ fun CepScreen(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .background(color = Color.Blue)
                 .padding(top = 16.dp, bottom = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -88,7 +91,8 @@ fun CepScreen(modifier: Modifier = Modifier) {
         }
 
         Card(
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth()
                 .offset(y = (-30).dp)
         ) {
@@ -109,7 +113,7 @@ fun CepScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = "Qual CEP está buscando?") },
                     trailingIcon = {
-                        IconButton( onClick = { /* TODO */ } ) {
+                        IconButton(onClick = { /* TODO */ }) {
                             Icon(
                                 imageVector = Icons.Default.Search,
                                 contentDescription = ""
@@ -126,7 +130,7 @@ fun CepScreen(modifier: Modifier = Modifier) {
                         modifier = Modifier
                             .weight(1f)
                             .padding(end = 4.dp),
-                        label = { Text( text = "UF?" ) },
+                        label = { Text(text = "UF?") },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             capitalization = KeyboardCapitalization.Characters
@@ -139,7 +143,7 @@ fun CepScreen(modifier: Modifier = Modifier) {
                         value = cidadeState,
                         onValueChange = { cidadeState = it },
                         modifier = Modifier.weight(2f),
-                        label = { Text( text = "Qual a cidade?" ) },
+                        label = { Text(text = "Qual a cidade?") },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             capitalization = KeyboardCapitalization.Words
@@ -147,7 +151,7 @@ fun CepScreen(modifier: Modifier = Modifier) {
                     )
                 }
 
-                Row( verticalAlignment = Alignment.CenterVertically ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     OutlinedTextField(
                         value = ruaState,
                         onValueChange = { ruaState = it },
@@ -159,36 +163,36 @@ fun CepScreen(modifier: Modifier = Modifier) {
                         )
                     )
 
-                    IconButton( onClick = {
+                    IconButton(onClick = {
                         var call = RetrofitFactory().getEnderecoService()
-                            .getEnderecosByUfCidadeRua(
+                            .getEnderecoByUfCidadeRua(
                                 uf = ufState,
                                 cidade = cidadeState,
                                 rua = ruaState
-                        )
+                            )
 
-                        call.enqueue( callback = object: Callback<List<Endereco>> {
+                        call.enqueue(object : Callback<List<Endereco>> {
                             override fun onResponse(
                                 call: Call<List<Endereco>>,
                                 response: Response<List<Endereco>>
                             ) {
-                                Log.i("TESTE", "${ response.body() }")
+                                Log.i("TESTE", "${response.body()}")
                             }
 
                             override fun onFailure(
                                 call: Call<List<Endereco>>,
                                 t: Throwable
                             ) {
-                                Log.i("TESTE", "${ t.message }")
+                                Log.i("TESTE", "${t.message}")
                             }
                         })
+                    }) {
 
-                    }
-                    ) {
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = ""
                         )
+
                     }
                 }
             }
@@ -207,11 +211,13 @@ fun CepScreen(modifier: Modifier = Modifier) {
 @Composable
 fun CardEndereco() {
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(bottom = 4.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(8.dp)
         ) {
             Text(text = "CEP:")

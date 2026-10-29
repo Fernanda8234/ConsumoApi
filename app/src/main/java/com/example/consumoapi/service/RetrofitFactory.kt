@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 // cliente para as chamadas
 class RetrofitFactory {
 
-    val BASE_URL = "https://viacep.com.br/ws/"
+    private val BASE_URL = "https://viacep.com.br/ws/"
     private val retrofitFactory = Retrofit
         .Builder()
         .baseUrl(BASE_URL)

@@ -16,6 +16,4 @@ interface EnderecoService { // ponto de contato de coisa diferentes
         @Path("cidade") cidade: String,
         @Path("rua") rua: String
     ): Call<List<Endereco>>
-
-    fun getEnderecosByUfCidadeRua(uf: String, cidade: String, rua: String)
 }
