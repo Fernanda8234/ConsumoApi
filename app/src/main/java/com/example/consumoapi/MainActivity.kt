@@ -2,6 +2,7 @@ package com.example.consumoapi
 
 import android.os.Bundle
 import android.util.Log
+import androidx.compose.foundation.lazy.items
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -113,7 +114,29 @@ fun CepScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = "Qual CEP está buscando?") },
                     trailingIcon = {
-                        IconButton(onClick = { /* TODO */ }) {
+                        IconButton(onClick = {
+                            var call = RetrofitFactory().getEnderecoService()
+                                .getEnderecoByCep(
+                                    cep = cepState
+                                )
+                            call.enqueue(object : Callback<Endereco>{
+                                override fun onResponse(
+                                    call: Call<Endereco>,
+                                    response: Response<Endereco>
+                                ){
+                                    val enderecoEncontrado = response.body()!! // é uma lista, não da para passar direto
+
+                                    listaEnderecosState = listOf(enderecoEncontrado)
+                                }
+
+                                override fun onFailure(
+                                    call: Call<Endereco>,
+                                    t: Throwable
+                                ) {
+                                    Log.i("TESTE", "${t.message}")
+                                }
+                            })
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.Search,
                                 contentDescription = ""
@@ -176,7 +199,9 @@ fun CepScreen(modifier: Modifier = Modifier) {
                                 call: Call<List<Endereco>>,
                                 response: Response<List<Endereco>>
                             ) {
-                                Log.i("TESTE", "${response.body()}")
+                               // Log.i("TESTE", "${response.body()}") // para o logcat ali do lado (perto do terminal)
+
+                                listaEnderecosState = response.body()!!
                             }
 
                             override fun onFailure(
@@ -201,15 +226,15 @@ fun CepScreen(modifier: Modifier = Modifier) {
         LazyColumn(
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
-            items(120) {
-                CardEndereco()
+            items(listaEnderecosState) {
+                CardEndereco(endereco =  it)
             }
         }
     }
 }
 
 @Composable
-fun CardEndereco() {
+fun CardEndereco(endereco: Endereco) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -220,11 +245,11 @@ fun CardEndereco() {
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            Text(text = "CEP:")
-            Text(text = "Rua:")
-            Text(text = "Cidade:")
-            Text(text = "Bairro:")
-            Text(text = "UF:")
+            Text(text = "CEP: ${endereco.cep}")
+            Text(text = "Rua: ${endereco.rua}")
+            Text(text = "Cidade: ${endereco.cidade}")
+            Text(text = "Bairro: ${endereco.bairro}")
+            Text(text = "UF: ${endereco.uf}")
         }
     }
 }
